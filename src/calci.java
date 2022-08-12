@@ -1,5 +1,12 @@
 import java.io.IOException;
 import java.util.Scanner;
+//TODO=> work on the trim part for input
+//TODO=> return one step back on error don't shut down
+//TODO=> work on the power functin and spaces in input
+//TODO=> check if string starts with number and make it the main value
+//TODO=> add clear option to menu
+//TODO=> display rules when loggin in for the first time
+
 
 public class calci {
     double mainValue,answer;
