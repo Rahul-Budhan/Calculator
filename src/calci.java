@@ -9,84 +9,81 @@ import java.util.Scanner;
 
 
 public class calci {
-    double mainValue,answer;
-    public void throwError(calci object){
-        System.out.println("ERROR");
-        object.cli();
-    }
-    public double addition(double a){
-        return mainValue+a;
-    }
-    public double subtraction(double a){
-        return mainValue-a;
-    }
-    public double multiplication(double a){
-        return a*mainValue;
-    }
-    public double division(double a){
-        return mainValue/a;
-    }
-    public double remainder(double a){
-        return mainValue%a;
-    }
-    public double logOf(double a){
-        return Math.log(a);
-    }
-    public double squareOf(double a){
-        mainValue = (a*a);
-        return mainValue;
-    }
-    public double squareRootOf(double a){
-        mainValue = Math.sqrt(a);
-        return mainValue;
-    }
-    public double powerOf(double a, int b){
-        mainValue = Math.pow(a,b);
-        return mainValue;
-    }
-    public void operatorSelect(Scanner sc, calci object){
+     double mainValue,answer;
+
+
+    public void operatorSelect(Scanner sc, calci object, lib object2){
         System.out.println("Main Value is "+mainValue);
         System.out.println("Enter the operator");
-        String operator = sc.next().trim();
-        if(false){
-            //check if it starts with a number, if it does then that becoomes mainValue
+        String inPut = sc.next().trim();
+        String firstCharacter = String.valueOf(inPut.charAt(0));
+        boolean number = isNumeric(firstCharacter);
+        if(number){
+            mainValue=0;
         }
-        else if (operator.startsWith("+")) {
+        while (number) {
+            System.out.println(firstCharacter+" "+inPut+" "+" "+number);
+            if (inPut.startsWith("+") ||inPut.startsWith("-") || inPut.startsWith("/") || inPut.startsWith("%") || inPut.startsWith("*") )
+            {break;}
+            double a = Double.parseDouble(firstCharacter);
+            mainValue = (mainValue*10 + (a));
+            inPut = inPut.substring(1);
+            firstCharacter = String.valueOf(inPut.charAt(0));
+            number = isNumeric(firstCharacter);
+        }
+        System.out.println(mainValue+"::");
+        if (inPut.startsWith("+")) {
+            System.out.println("Enter the values"+inPut);
+            answer = object2.addition(mainValue,Double.parseDouble(inPut.substring(1)));
+        } else if (inPut.startsWith("-")) {
             System.out.println("Enter the values");
-            answer = object.addition(Double.parseDouble(operator.substring(1)));
-        } else if (operator.startsWith("-")) {
+            answer = object2.subtraction(mainValue,Double.parseDouble(inPut.substring(1)));
+        } else if (inPut.startsWith("/")) {
             System.out.println("Enter the values");
-            answer = object.subtraction(Double.parseDouble(operator.substring(1)));
-        } else if (operator.startsWith("/")) {
+            answer = object2.division(mainValue,Double.parseDouble(inPut.substring(1)));
+        } else if (inPut.startsWith("*")) {
             System.out.println("Enter the values");
-            answer = object.division(Double.parseDouble(operator.substring(1)));
-        } else if (operator.startsWith("*")) {
+            answer = object2.multiplication(mainValue,Double.parseDouble(inPut.substring(1)));
+        } else if (inPut.startsWith("%")) {
             System.out.println("Enter the values");
-            answer = object.multiplication(Double.parseDouble(operator.substring(1)));
-        } else if (operator.startsWith("%")) {
-            System.out.println("Enter the values");
-            answer = object.remainder(Double.parseDouble(operator.substring(1)));
-        } else if (operator.startsWith("log")) {
+            answer = object2.remainder(mainValue,Double.parseDouble(inPut.substring(1)));
+        } else if (inPut.startsWith("log")) {
             System.out.println("Enter the value");
-            answer = object.logOf(Double.parseDouble(operator.substring(3)));
-        } else if (operator.startsWith("square")) {
-            System.out.println("Enter the value"+operator.substring(6));
-            answer = object.squareOf(Double.parseDouble(operator.substring(6)));
-        } else if (operator.startsWith("sqrt")) {
-            System.out.println("Enter the values"+(operator.substring(4)).trim());
-
-//            answer = object.squareRootOf(Double.parseDouble(operator.substring(4).trim()));
-        } else if (operator.startsWith("power")) {
+            answer = object2.logOf(Double.parseDouble(inPut.substring(3)));
+        } else if (inPut.startsWith("square")) {
+            System.out.println("Enter the value"+inPut.substring(6));
+            answer = object2.squareOf(Double.parseDouble(inPut.substring(6)));
+        } else if (inPut.startsWith("sqrt")) {
+            System.out.println("Enter the values"+(inPut.substring(4)).trim());
+        } else if (inPut.startsWith("power")) {
             System.out.println("Enter the values");
-            answer = object.powerOf(sc.nextDouble(), sc.nextInt());
+            answer = object2.powerOf(sc.nextDouble(), sc.nextInt());
+        } else if (inPut.startsWith("clear")) {
+            clearScreen();
         } else {
-            object.throwError(object);
+            object2.throwError(object);
         }
         {
             mainValue = answer;
         }
         System.out.println(answer);
-        object.operatorSelect(sc,object);
+        object.operatorSelect(sc,object, object2);
+    }
+    public static boolean isNumeric(String string) {
+        int intValue;
+        System.out.printf("Parsing string: \"%s\"%n", string);
+        if(string == null || string.equals("")) {
+            System.out.println("String cannot be parsed, it is null or empty.");
+            return false;
+        }
+
+        try {
+            intValue = Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("Input String cannot be parsed to Integer.");
+        }
+        return false;
     }
     public static void clearScreen(){//Clears Screen in java
         try {
@@ -105,9 +102,10 @@ public class calci {
     public void cli(){
         Scanner sc = new Scanner(System.in);
         calci object = new calci();
+        lib object2 = new lib();
         clearScreen();
         object.home();
-        object.operatorSelect(sc,object);
+        object.operatorSelect(sc,object,object2);
 
     }
     public static void main(String[] args) {
